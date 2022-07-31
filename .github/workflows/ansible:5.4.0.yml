@@ -1,10 +1,6 @@
-name: build terraform:0.13.7
+name: build ansible:5.4.0
 
-on:
-  workflow_run:
-    workflows: ["build ansible:5.4.0"]
-    types:
-      - completed
+on: workflow_dispatch
 
 jobs:
   build-and-push-image:
@@ -27,6 +23,6 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: ./terraform:0.13.7
+          context: ./ansible:5.4.0
           push: true
-          tags: ghcr.io/valengus/terraform:0.13.7
+          tags: ghcr.io/valengus/ansible:5.4.0
