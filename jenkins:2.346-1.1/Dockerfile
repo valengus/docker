@@ -13,6 +13,4 @@ RUN dnf install -y java-11-openjdk ; \
 COPY jenkins.sh /usr/local/bin/jenkins.sh
 RUN chmod ugo+x /usr/local/bin/jenkins.sh
 
-
-
 ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
