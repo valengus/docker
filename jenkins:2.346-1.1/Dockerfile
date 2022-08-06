@@ -6,7 +6,7 @@ ARG http_port=8080
 
 RUN dnf install -y git java-11-openjdk ; \
     curl -o /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo ; \
-    rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+    rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key ; \
     dnf -y install jenkins-${JENKINS_VERSION} ; \
     dnf clean all
 
