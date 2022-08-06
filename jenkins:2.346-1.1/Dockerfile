@@ -1,4 +1,4 @@
-FROM lts-centos7-jdk11
+FROM jenkins/jenkins:lts-centos7-jdk11
 
 ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
 
