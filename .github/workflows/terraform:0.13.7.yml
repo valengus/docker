@@ -1,10 +1,11 @@
 name: build terraform:0.13.7
 
 on:
+  workflow_dispatch:
   workflow_run:
-    workflows: ["build ansible:5.4.0"]
-    types:
-      - completed
+      workflows: ["build ansible:5.4.0"]
+      types:
+        - completed
 
 jobs:
   build-and-push-image:
