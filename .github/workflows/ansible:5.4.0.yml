@@ -1,10 +1,11 @@
 name: build ansible:5.4.0
 
 on:
+  workflow_dispatch:
   workflow_run:
-    workflows: ["build oraclelinux:8"]
-    types:
-      - completed
+      workflows: ["build oraclelinux:8"]
+      types:
+        - completed
 
 jobs:
   build-and-push-image:
