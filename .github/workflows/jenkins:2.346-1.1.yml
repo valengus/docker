@@ -1,10 +1,11 @@
 name: build jenkins:2.346-1.1
 
 on:
-  workflow_run:
-    workflows: ["build oraclelinux:8"]
-    types:
-      - completed
+  - workflow_dispatch:
+  - workflow_run:
+      workflows: ["build oraclelinux:8"]
+      types:
+        - completed
 
 jobs:
   build-and-push-image:
