@@ -1,19 +1,28 @@
-FROM ghcr.io/valengus/oraclelinux:8
+FROM lts-centos7-jdk11
 
-ARG JENKINS_VERSION=2.346-1.1
-ARG JENKINS_HOME=/var/lib/jenkins
-ARG http_port=8080
+ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
 
-ENV JENKINS_HOME $JENKINS_HOME
-ENV http_port $http_port
+ENV ADMIN_USER="admin"
+ENV ADMIN_PASSWORD="password"
 
-RUN dnf install -y java-11-openjdk ; \
-    curl -o /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo ; \
-    rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key ; \
-    dnf -y install jenkins-${JENKINS_VERSION} ; \
-    dnf clean all
+RUN /usr/local/bin/install-plugins.sh \
+    configuration-as-code:1.53 \
+    job-dsl:1.77 \
+    workflow-aggregator:2.6 \
+    git:4.8.2 \
+    locale:1.4 \
+    ssh-agent:1.23 \
+    ssh-slaves:1.33.0 \
+    ws-cleanup:0.39 \
+    docker-plugin:1.2.3 \
+    docker-workflow:1.26 \
+    ansible:1.1 \
+    parameterized-scheduler:1.0 \
+    git-parameter:0.9.13
 
-COPY jenkins.sh /usr/local/bin/jenkins.sh
-RUN chmod ugo+x /usr/local/bin/jenkins.sh
+ENV CASC_JENKINS_CONFIG="/usr/local/jenkins-config-as-code.yaml"
+COPY jenkins-config-as-code.yaml /usr/local/jenkins-config-as-code.yaml
 
-ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
+EXPOSE 8080
+
+ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/jenkins.sh"]

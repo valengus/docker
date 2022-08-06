@@ -1,0 +1,12 @@
+jenkins:
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: ${ADMIN_USER}
+          password: ${ADMIN_PASSWORD}
+  authorizationStrategy: loggedInUsersCanDoAnything
+
+security:
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false
