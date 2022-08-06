@@ -5,7 +5,7 @@ ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
 ENV ADMIN_USER="admin"
 ENV ADMIN_PASSWORD="password"
 
-RUN /usr/local/bin/install-plugins.sh \
+RUN jenkins-plugin-cli --plugins \
     configuration-as-code:1.53 \
     job-dsl:1.77 \
     workflow-aggregator:2.6 \
