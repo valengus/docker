@@ -1,4 +1,4 @@
-FROM ghcr.io/valengus/jenkins:2.346
+FROM oraclelinux:9
 
 ARG JENKINS_VERSION=2.346-1.1
 ARG JENKINS_HOME=/var/lib/jenkins
