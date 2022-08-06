@@ -1,7 +1,5 @@
 name: build ansible:5.4.0
 
-on: workflow_dispatch
-
 on:
   workflow_run:
     workflows: ["build oraclelinux:8"]
