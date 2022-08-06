@@ -1,4 +1,4 @@
-FROM oraclelinux:9
+FROM ghcr.io/valengus/oraclelinux:8
 
 RUN dnf install -y ansible-5.4.0 ; \
     dnf clean all
