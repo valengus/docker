@@ -1,12 +1,6 @@
-name: build ansible:5.4.0
+name: build oraclelinux:8
 
 on: workflow_dispatch
-
-on:
-  workflow_run:
-    workflows: ["build oraclelinux:8"]
-    types:
-      - completed
 
 jobs:
   build-and-push-image:
@@ -29,6 +23,6 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: ./ansible:5.4.0
+          context: ./oraclelinux:8
           push: true
-          tags: ghcr.io/valengus/ansible:5.4.0
+          tags: ghcr.io/valengus/oraclelinux:8
