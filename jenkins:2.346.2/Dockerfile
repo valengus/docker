@@ -6,11 +6,9 @@ ENV ADMIN_USER="admin"
 ENV ADMIN_PASSWORD="password"
 
 RUN jenkins-plugin-cli --plugins \
-    configuration-as-code
-    
-    # \
-    # job-dsl:1.77 \
-    # workflow-aggregator:2.6 \
+    configuration-as-code \
+    job-dsl \
+    workflow-aggregator
     # git:4.8.2 \
     # locale:1.4 \
     # ssh-agent:1.23 \
