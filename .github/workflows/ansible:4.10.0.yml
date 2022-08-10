@@ -1,4 +1,4 @@
-name: build ansible:2.9
+name: build ansible:4.10.0
 
 on:
   workflow_dispatch:
@@ -28,6 +28,6 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: ./ansible:2.9
+          context: ./ansible:4.10.0
           push: true
-          tags: ghcr.io/valengus/ansible:2.9
+          tags: ghcr.io/valengus/ansible:4.10.0
