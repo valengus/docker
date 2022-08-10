@@ -1,4 +1,4 @@
-FROM ghcr.io/valengus/ansible:4.10.0
+FROM ghcr.io/valengus/ansible:6.2.0
 
 RUN dnf install -y yum-utils ; \
     yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo ; \
