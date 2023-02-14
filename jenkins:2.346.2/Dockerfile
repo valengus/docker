@@ -6,6 +6,7 @@ ENV ADMIN_USER="admin"
 ENV ADMIN_PASSWORD="password"
 
 RUN jenkins-plugin-cli --plugins \
+    git-parameter \
     configuration-as-code \
     job-dsl \
     workflow-aggregator \
