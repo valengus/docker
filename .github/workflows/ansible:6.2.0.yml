@@ -3,7 +3,7 @@ name: build ansible:6.2.0
 on:
   workflow_dispatch:
   workflow_run:
-      workflows: ["build oraclelinux:8"]
+      workflows: ["build python:3.9"]
       types:
         - completed
 
