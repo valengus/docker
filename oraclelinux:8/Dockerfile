@@ -2,7 +2,7 @@ FROM oraclelinux:8
 
 RUN dnf install -y epel-release ; \
     dnf install -y tini git s3fs-fuse; \
-    dnf clean all \
+    dnf clean all ; \
     echo "${MINIO_LOGIN}:${MINIO_PASS}" > /etc/passwd-s3fs && \
     cmod 0400 /etc/passwd-s3fs
 
