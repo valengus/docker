@@ -3,7 +3,7 @@ name: build terraform:0.13.7
 on:
   workflow_dispatch:
   workflow_run:
-      workflows: ["build ansible:6.2.0"]
+      workflows: ["build ansible:2.14.2"]
       types:
         - completed
 
