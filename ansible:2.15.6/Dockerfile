@@ -10,4 +10,4 @@ RUN dnf install -y python3 python3-pip && \
 
 COPY ansible.cfg /etc/ansible/ansible.cfg
 
-CMD ["/usr/sbin/init"]
+CMD ["sleep infinity"]
