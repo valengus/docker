@@ -7,9 +7,8 @@ RUN pip install molecule>=4.0.0 && \
     pip install ansible-lint>=6.4.0 && \
     dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo && \ 
     dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin && \
+    mkdir /molecule  && \
     dnf clean all
-
-RUN mkdir /molecule
 
 WORKDIR /molecule
 
