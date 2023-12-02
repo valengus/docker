@@ -1,11 +1,10 @@
 
 
 ```bash
-docker run --name ansible_molecule --rm -d \
+docker run --name molecule --rm -it \
 -v /var/run/docker.sock:/var/run/docker.sock \
--v $(pwd):/molecule ghcr.io/valengus/ansible:molecule
-```
+-v $(pwd):/molecule -v ~/.ssh/id_rsa:/root/.ssh/id_rsa \
+ghcr.io/valengus/ansible:molecule bash
 
-```bash
-docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/molecule ghcr.io/valengus/ansible:molecule molecule test --all
+molecule test all
 ```
