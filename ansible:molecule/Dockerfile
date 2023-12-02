@@ -12,4 +12,4 @@ RUN pip install molecule>=4.0.0 && \
 
 WORKDIR /molecule
 
-CMD ["sleep infinity"]
+CMD ["/usr/bin/sleep infinity"]
