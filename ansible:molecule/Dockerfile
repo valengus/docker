@@ -9,4 +9,8 @@ RUN pip install molecule>=4.0.0 && \
     dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin && \
     dnf clean all
 
-CMD ["/usr/sbin/init"]
+RUN mkdir /molecule
+
+WORKDIR /molecule
+
+CMD ["sleep infinity"]
