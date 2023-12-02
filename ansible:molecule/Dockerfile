@@ -10,6 +10,8 @@ RUN pip install molecule>=4.0.0 && \
     mkdir /molecule  && \
     dnf clean all
 
+COPY ssh_config /root/.ssh/config
+
 WORKDIR /molecule
 
 CMD ["/usr/bin/sleep infinity"]
