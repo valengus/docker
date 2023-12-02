@@ -1,4 +1,4 @@
-name: build molecule_ansible
+name: build ansible:molecule
 
 on:
   workflow_dispatch:
@@ -28,6 +28,6 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: ./molecule_ansible
+          context: ./ansible:molecule
           push: true
-          tags: ghcr.io/valengus/molecule_ansible
+          tags: ghcr.io/valengus/ansible:molecule
