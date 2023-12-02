@@ -1,9 +1,9 @@
-name: build ansible:latest
+name: build ansible:2.15.6
 
 on:
   workflow_dispatch:
   workflow_run:
-      workflows: ["build python:3.9"]
+      workflows: ["build oraclelinux:9"]
       types:
         - completed
 
@@ -28,6 +28,6 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: ./ansible:latest
+          context: ./ansible:2.15.6
           push: true
-          tags: ghcr.io/valengus/ansible:latest
+          tags: ghcr.io/valengus/ansible:2.15.6

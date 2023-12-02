@@ -3,7 +3,7 @@ name: build ansible:molecule
 on:
   workflow_dispatch:
   workflow_run:
-      workflows: ["build oraclelinux:9"]
+      workflows: ["build ansible:2.15.6"]
       types:
         - completed
 
