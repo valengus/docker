@@ -1,4 +1,4 @@
-FROM ghcr.io/valengus/oraclelinux:9
+FROM valengus/oraclelinux9
 
 RUN dnf install -y python3 python3-pip && \
     pip install pip --upgrade && \
