@@ -1,0 +1,24 @@
+---
+- name: Provision
+  hosts: all
+  become: true
+
+  tasks:
+
+  - name: Install java-17-openjdk
+    ansible.builtin.dnf:
+      name: java-17-openjdk
+      state: present
+
+  - name: Packer | Add Hashicorp repository
+    ansible.builtin.yum_repository:
+      name: "hashicorp"
+      description: "Hashicorp Stable - $basearch"
+      baseurl: "https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable"
+      state: "{{ item.state | default('present') }}"
+      gpgkey: "https://rpm.releases.hashicorp.com/gpg"
+      gpgcheck: true
+
+  - name: Packer | Install Packer
+    ansible.builtin.dnf:
+      name: packer

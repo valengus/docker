@@ -1,0 +1,12 @@
+---
+- name: Provision
+  hosts: all
+  become: true
+
+  tasks:
+
+  - name: "Ansible | Install ansible"
+    ansible.builtin.pip:
+      name: 
+      - ansible-core>=2.15
+      - ansible

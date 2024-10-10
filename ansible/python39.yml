@@ -1,0 +1,13 @@
+---
+- name: Provision
+  hosts: all
+  become: true
+
+  tasks:
+
+  - name: Python3 | Install pkgs
+    ansible.builtin.dnf:
+      name: 
+      - python3
+      - python3-pip
+      state: present

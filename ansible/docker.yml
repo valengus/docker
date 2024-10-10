@@ -1,0 +1,22 @@
+---
+- name: Provision
+  hosts: all
+  become: true
+
+  tasks:
+
+  - name: Docker | Add docker repository
+    ansible.builtin.yum_repository:
+      name: "docker-ce-stable"
+      description: "Docker CE Stable - $basearch"
+      baseurl: "https://download.docker.com/linux/centos/$releasever/$basearch/stable"
+      state: "{{ item.state | default('present') }}"
+      gpgkey: "https://download.docker.com/linux/centos/gpg"
+      gpgcheck: true
+
+  - name: Docker | Install Docker CE
+    ansible.builtin.dnf:
+      name: 
+      - docker-ce 
+      - docker-ce-cli  
+      - containerd.io

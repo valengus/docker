@@ -1,0 +1,21 @@
+---
+- name: Provision
+  hosts: all
+  become: true
+
+  tasks:
+
+  - name: Install epel-release
+    ansible.builtin.dnf:
+      name: epel-release
+
+  - name: Install pkgs
+    ansible.builtin.dnf:
+      name: 
+      - dnf-utils
+
+  - name: Upgrade all packages
+    ansible.builtin.dnf:
+      name: '*'
+      state: latest
+      update_only: True
