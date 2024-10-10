@@ -7,3 +7,6 @@ jenkins:
         password: ${JENKINS_ADMIN_PASS}
   authorizationStrategy: loggedInUsersCanDoAnything
 
+security:
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false

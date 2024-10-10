@@ -9,8 +9,7 @@
     - ws-cleanup
     - workflow-aggregator
     - job-dsl
-    - matrix-auth
-    - blueocean
+    - script-security
 
   tasks:
 
@@ -64,9 +63,13 @@
             local:
               allowsSignup: false
               users:
-                - id: ${JENKINS_ADMIN_USER}
-                  password: ${JENKINS_ADMIN_PASS}
+              - id: ${JENKINS_ADMIN_USER}
+                password: ${JENKINS_ADMIN_PASS}
           authorizationStrategy: loggedInUsersCanDoAnything
+
+        security:
+          globalJobDslSecurityConfiguration:
+            useScriptSecurity: false
 
       dest: /var/lib/jenkins/jenkins-config-as-code.yaml
       owner: jenkins
