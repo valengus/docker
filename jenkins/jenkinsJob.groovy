@@ -11,7 +11,7 @@ folder('github/valengus/docker') {
 }
 
 List filesPath=[]
-File fileDir=new File("/var/lib/jenkins/")
+File fileDir=new File(".")
 fileDir.eachDirRecurse() { 
   dir -> dir.eachFileMatch(~/.*.pkr*hcl/) { 
     file -> filesPath.add(file.path)
