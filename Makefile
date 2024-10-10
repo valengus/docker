@@ -1,7 +1,12 @@
+all: prepare clean buildAll
+
+clean:
+	docker image prune -af
+
 prepare:
 	packer init oraclelinux9.pkr.hcl
 
-build_basic:
+buildAll:
 	packer build oraclelinux9.pkr.hcl
 	packer build -var-file="vars/python39.pkrvars.hcl"   oraclelinux9.pkr.hcl
 	packer build -var-file="vars/jdk17.pkrvars.hcl"      oraclelinux9.pkr.hcl
