@@ -5,11 +5,6 @@
 
   tasks:
 
-  - name: Install java-17-openjdk
-    ansible.builtin.dnf:
-      name: java-17-openjdk
-      state: present
-
   - name: Packer | Add Hashicorp repository
     ansible.builtin.yum_repository:
       name: "hashicorp"

@@ -10,6 +10,8 @@
     - workflow-aggregator
     - job-dsl
     - script-security
+    - pipeline-stage-view
+    - docker-workflow
 
   tasks:
 
@@ -17,7 +19,15 @@
     ansible.builtin.dnf:
       name: 
       - git
+      - sudo
       state: present
+
+  - name: /etc/sudoers.d/jenkins
+    ansible.builtin.copy:
+      content: |
+        jenkins  ALL=(ALL)	NOPASSWD: ALL
+
+      dest: /etc/sudoers.d/jenkins
 
   - name: Jenkins | Copy Jenkins repo GPG key
     ansible.builtin.rpm_key:
