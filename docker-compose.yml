@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+
+  jenkins-master:
+    container_name: jenkins-master
+    image: local/jenkins:latest
+    restart: unless-stopped
+    ports:
+    - 8080:8080
+    environment:
+    - JENKINS_ADMIN_USER=admin
+    - JENKINS_ADMIN_PASS=password
+    - DOCKER_HOST=tcp://docker:2376
+    - DOCKER_CERT_PATH=/certs/client
+    - DOCKER_TLS_VERIFY=1
+    volumes:
+    - jenkins-docker-certs:/certs/client:ro
+
+  docker:
+    container_name: docker
+    image: docker:dind
+    privileged: true
+    restart: unless-stopped
+    ports:
+    - 2376:2376
+    tty: true
+    volumes:
+    - jenkins-docker-certs:/certs/client
+    environment:
+    - DOCKER_TLS_CERTDIR=/certs
+
+volumes:
+  jenkins-docker-certs:

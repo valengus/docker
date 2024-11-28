@@ -1,0 +1,14 @@
+---
+- name: Provision
+  hosts: all
+  become: true
+
+  tasks:
+
+  - name: CLEANUP | Delete DNF cache
+    command: dnf clean all
+
+  - name: CLEANUP | Truncate files
+    command: "truncate -s 0 {{ item }}"
+    loop:
+      - /var/log/dnf.log

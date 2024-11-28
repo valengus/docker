@@ -1,0 +1,11 @@
+---
+- name: Provision
+  hosts: all
+  become: true
+
+  tasks:
+
+  - name: Install java-17-openjdk
+    ansible.builtin.dnf:
+      name: java-17-openjdk
+      state: present

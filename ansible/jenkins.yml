@@ -1,0 +1,128 @@
+---
+- name: Provision
+  hosts: all
+  become: true
+  
+  vars:
+    jenkins_repo_url: "http://pkg.jenkins.io/redhat-stable"
+
+    jenkins_plugins:
+    - workflow-aggregator:600.vb_57cdd26fdd7
+    - git:5.5.2
+    - ws-cleanup:0.47
+    - job-dsl:1.87
+    - script-security:1369.v9b_98a_4e95b_2d
+    - pipeline-stage-view:2.34
+    - docker-workflow:580.vc0c340686b_54
+    - swarm:3.47
+
+  tasks:
+
+  - name: Jenkins | Install pkgs
+    ansible.builtin.dnf:
+      name: 
+      - git
+      state: present
+
+  - name: Jenkins | Copy Jenkins repo GPG key
+    ansible.builtin.rpm_key:
+      state: present
+      key: https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+  - name: Jenkins | Add Jenkins repository
+    ansible.builtin.yum_repository:
+      name: "jenkins"
+      description: "Jenkins-stable"
+      baseurl: "{{ jenkins_repo_url }}"
+      state: "{{ item.state | default('present') }}"
+
+  - name: Jenkins | Install jenkins
+    ansible.builtin.yum:
+      name: jenkins-2.479.2-1.1
+
+  - name: Jenkins | Download jenkins-plugin-manager
+    get_url:
+      url: "https://github.com/jenkinsci/plugin-installation-manager-tool/releases/download/2.13.0/jenkins-plugin-manager-2.13.0.jar"
+      dest: "/var/lib/jenkins/jenkins-plugin-manager.jar"
+
+  - name: Jenkins | Ensure plugins folder exists.
+    file:
+      path: "/var/lib/jenkins/plugins"
+      owner: jenkins
+      group: jenkins
+      state: directory
+      mode: u=rwx,g=rx,o=rx
+
+  - name: Jenkins | Install configuration-as-code plugin
+    shell: java -jar /var/lib/jenkins/jenkins-plugin-manager.jar --war /usr/share/java/jenkins.war -d /var/lib/jenkins/plugins --plugins configuration-as-code
+
+  - name: Jenkins | Install plugins {{ jenkins_plugins }}
+    shell: java -jar /var/lib/jenkins/jenkins-plugin-manager.jar --war /usr/share/java/jenkins.war -d /var/lib/jenkins/plugins --plugins {{ item }}
+    with_items: "{{ jenkins_plugins }}"
+
+  - name: Copy /var/lib/jenkins/jenkins-config-as-code.yaml
+    ansible.builtin.copy:
+      content: |
+        jenkins:
+          securityRealm:
+            local:
+              allowsSignup: false
+              users:
+                - id: ${JENKINS_ADMIN_USER}
+                  password: ${JENKINS_ADMIN_PASS}
+          authorizationStrategy: loggedInUsersCanDoAnything
+
+      dest: /var/lib/jenkins/jenkins-config-as-code.yaml
+      owner: jenkins
+      group: jenkins
+      mode: '0640'
+
+
+
+
+  - name: Docker | Add docker repository
+    ansible.builtin.yum_repository:
+      name: "docker-ce-stable"
+      description: "Docker CE Stable - $basearch"
+      baseurl: "https://download.docker.com/linux/centos/$releasever/$basearch/stable"
+      state: "{{ item.state | default('present') }}"
+      gpgkey: "https://download.docker.com/linux/centos/gpg"
+      gpgcheck: true
+
+  - name: Docker | Install Docker CE
+    ansible.builtin.dnf:
+      name: 
+      - docker-ce 
+      - docker-ce-cli  
+      - containerd.io
+
+
+
+  - name: Packer | Add Hashicorp repository
+    ansible.builtin.yum_repository:
+      name: "hashicorp"
+      description: "Hashicorp Stable - $basearch"
+      baseurl: "https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable"
+      state: "{{ item.state | default('present') }}"
+      gpgkey: "https://rpm.releases.hashicorp.com/gpg"
+      gpgcheck: true
+
+  - name: Packer | Install Packer
+    ansible.builtin.dnf:
+      name: packer
+
+
+
+
+  - name: Python3 | Install pkgs
+    ansible.builtin.dnf:
+      name: 
+      - python3
+      - python3-pip
+      state: present
+
+  - name: "Ansible | Install ansible"
+    ansible.builtin.pip:
+      name: 
+      - ansible-core>=2.15
+      - ansible
