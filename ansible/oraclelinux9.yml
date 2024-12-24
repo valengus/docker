@@ -1,5 +1,5 @@
 ---
-- name: Provision
+- name: Install
   hosts: all
   become: true
 

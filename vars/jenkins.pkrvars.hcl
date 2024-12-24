@@ -1,7 +1,6 @@
 base_image = "local/jdk17:latest"
 image_name = "jenkins"
 tags       = ["latest", "2.479.2"]
-
 changes = [
   "ENV LANG=\"C.UTF-8\"",
 

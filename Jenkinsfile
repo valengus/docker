@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  parameters {
+    choice(name: 'DOCKER_IMAGE', choices: ['oraclelinux9', 'jdk17', 'jenkins', 'python39'], description: 'Docker image')
+  }
+
   stages {
 
     stage('Checkout') {
@@ -17,25 +21,25 @@ pipeline {
 
     stage('Prepare') {
       steps {
-          sh '/usr/bin/packer init oraclelinux9.pkr.hcl'
+        sh '/usr/bin/packer init docker.pkr.hcl'
       }
     }
 
     stage('Build') {
       steps {
-          sh '/usr/bin/packer build oraclelinux9.pkr.hcl'
+        sh '/usr/bin/packer build -var-file=\"vars/${DOCKER_IMAGE}.pkrvars.hcl\" docker.pkr.hcl'
       }
     }
 
     stage('Test') {
       steps {
-          echo 'Test'
+        echo 'Test'
       }
     }
 
     stage('Push') {
       steps {
-          echo 'Push'
+        echo 'Push'
       }
     }
 

@@ -1,11 +1,9 @@
 ```bash
-docker rm -vf $(docker ps -aq) ; docker rmi -f $(docker images -aq)
+packer init docker.pkr.hcl
 
-make prepare
+packer build -var-file="vars/oraclelinux9.pkrvars.hcl" docker.pkr.hcl
+packer build -var-file="vars/jdk17.pkrvars.hcl"        docker.pkr.hcl
+packer build -var-file="vars/jenkins.pkrvars.hcl"      docker.pkr.hcl
 
-make build-oraclelinux9
-make build-jdk17
-make build-jenkins
-
-docker-compose stop ; docker-compose rm -f ; docker-compose up -d
+docker-compose up -d
 ```

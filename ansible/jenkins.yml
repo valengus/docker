@@ -1,20 +1,19 @@
 ---
-- name: Provision
+- name: Install
   hosts: all
   become: true
   
   vars:
     jenkins_repo_url: "http://pkg.jenkins.io/redhat-stable"
-
     jenkins_plugins:
     - workflow-aggregator:600.vb_57cdd26fdd7
-    - git:5.5.2
-    - ws-cleanup:0.47
-    - job-dsl:1.87
+    - git:5.6.0
+    - ws-cleanup:0.48
+    - job-dsl:1.90
     - script-security:1369.v9b_98a_4e95b_2d
     - pipeline-stage-view:2.34
     - docker-workflow:580.vc0c340686b_54
-    - swarm:3.47
+    - swarm:3.48
 
   tasks:
 
@@ -60,7 +59,7 @@
     shell: java -jar /var/lib/jenkins/jenkins-plugin-manager.jar --war /usr/share/java/jenkins.war -d /var/lib/jenkins/plugins --plugins {{ item }}
     with_items: "{{ jenkins_plugins }}"
 
-  - name: Copy /var/lib/jenkins/jenkins-config-as-code.yaml
+  - name: Jenkins | Copy /var/lib/jenkins/jenkins-config-as-code.yaml
     ansible.builtin.copy:
       content: |
         jenkins:
@@ -76,7 +75,6 @@
       owner: jenkins
       group: jenkins
       mode: '0640'
-
 
 
 
@@ -110,7 +108,6 @@
   - name: Packer | Install Packer
     ansible.builtin.dnf:
       name: packer
-
 
 
 

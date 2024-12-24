@@ -34,9 +34,8 @@ variable "changes" {
   ]
 }
 
-
-
-source "docker" "base_image" {
+# BUILD
+source "docker" "build" {
   image       = var.base_image
   run_command = [ "-dit", "--name", "packer_build_${var.image_name}", "{{.Image}}", "/bin/sh" ]
   commit      = true
@@ -47,7 +46,7 @@ source "docker" "base_image" {
 build {
 
   name    = var.image_name
-  sources = [ "source.docker.base_image" ]
+  sources = [ "source.docker.build" ]
 
   provisioner "ansible" {
     playbook_file   = "ansible/${var.image_name}.yml"
@@ -67,3 +66,22 @@ build {
   }
 
 }
+
+
+# # PUSH
+# source "docker" "push" {
+#   image       = "local/${var.image_name}"
+#   commit      = true
+#   pull        = false
+# }
+# build {
+#   sources = [ "source.docker.push" ]
+#   post-processor "docker-tag" {
+#     repository          = "localhost:5000/${var.image_name}"
+#     keep_input_artifact = true
+#     tags                = var.tags
+#   }
+#   post-processor "docker-push" {
+#     login        = false
+#   }
+# }

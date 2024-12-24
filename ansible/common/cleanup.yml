@@ -1,5 +1,5 @@
 ---
-- name: Provision
+- name: CLEANUP
   hosts: all
   become: true
 
