@@ -25,6 +25,13 @@ pipeline {
 
     stage('Prepare') {
       steps {
+        script {
+          if (env.DOCKER_IMAGE) {
+          } else {
+            currentBuild.result = 'SUCCESS'
+            return
+          }
+        }
         sh '/usr/bin/packer init docker.pkr.hcl'
       }
     }
@@ -43,7 +50,7 @@ pipeline {
 
     stage('Push') {
       steps {
-        sh '/usr/bin/packer build -var-file=\"vars/${DOCKER_IMAGE}.pkrvars.hcl\" -only=\'docker.push\' docker.pkr.hcl'
+        sh '/usr/bin/packer build -var-file=\"vars/${DOCKER_IMAGE}.pkrvars.hcl\" -only=\"docker.push\" docker.pkr.hcl'
       }
     }
 

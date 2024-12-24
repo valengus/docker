@@ -20,6 +20,7 @@ services:
   docker:
     container_name: docker
     image: docker:dind
+    command: ["--insecure-registry=docker-registry:5000"]
     privileged: true
     restart: unless-stopped
     ports:
