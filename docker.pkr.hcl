@@ -11,6 +11,10 @@ packer {
   }
 }
 
+locals {
+  packerstarttime = formatdate("YYYYMMDD", timestamp())
+}
+
 variable "base_image" {
   type    = string
   default = "docker.io/library/oraclelinux:9"
@@ -69,12 +73,12 @@ build {
 
     post-processor "docker-tag" {
       repository = "local/${var.image_name}"
-      tags       = var.tags
+      tags       = concat(var.tags, [local.packerstarttime,])
     }
 
-    post-processor "docker-save" {
-      path = "${var.image_name}.tar"
-    }
+    # post-processor "docker-save" {
+    #   path = "${var.image_name}.tar"
+    # }
 
   }
 
@@ -97,7 +101,7 @@ build {
     post-processor "docker-tag" {
       repository          = "${var.docker_registry}/${var.image_name}"
       keep_input_artifact = true
-      tags                = var.tags
+      tags                = concat(var.tags, [local.packerstarttime,])
     }
 
     post-processor "docker-push" {
