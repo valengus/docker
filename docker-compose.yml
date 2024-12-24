@@ -30,10 +30,11 @@ services:
     environment:
     - DOCKER_TLS_CERTDIR=/certs
 
-  # registry:
-  #   image: registry:2
-  #   ports:
-  #   - 5000:5000
+  docker-registry:
+    container_name: docker-registry
+    image: registry:2.7
+    ports:
+    - 5000:5000
 
 volumes:
   jenkins-docker-certs:

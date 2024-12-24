@@ -34,6 +34,11 @@ variable "changes" {
   ]
 }
 
+variable "docker_registry" {
+  type    = string
+  default = "localhost:5000"
+}
+
 # BUILD
 source "docker" "build" {
   image       = var.base_image
@@ -60,28 +65,45 @@ build {
     extra_arguments = [ "--extra-vars", "ansible_host=packer_build_${var.image_name} ansible_connection=docker", ]
   }
 
-  post-processor "docker-tag" {
-    repository = "local/${var.image_name}"
-    tags       = var.tags
+  post-processors {
+
+    post-processor "docker-tag" {
+      repository = "local/${var.image_name}"
+      tags       = var.tags
+    }
+
+    post-processor "docker-save" {
+      path = "${var.image_name}.tar"
+    }
+
   }
 
 }
 
 
-# # PUSH
-# source "docker" "push" {
-#   image       = "local/${var.image_name}"
-#   commit      = true
-#   pull        = false
-# }
-# build {
-#   sources = [ "source.docker.push" ]
-#   post-processor "docker-tag" {
-#     repository          = "localhost:5000/${var.image_name}"
-#     keep_input_artifact = true
-#     tags                = var.tags
-#   }
-#   post-processor "docker-push" {
-#     login        = false
-#   }
-# }
+
+# PUSH
+source "docker" "push" {
+  image       = "local/${var.image_name}"
+  commit      = true
+  pull        = false
+}
+
+build {
+  sources = [ "source.docker.push" ]
+
+  post-processors {
+
+    post-processor "docker-tag" {
+      repository          = "${var.docker_registry}/${var.image_name}"
+      keep_input_artifact = true
+      tags                = var.tags
+    }
+
+    post-processor "docker-push" {
+      login = false
+    }
+
+  }
+
+}

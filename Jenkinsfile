@@ -5,6 +5,10 @@ pipeline {
     choice(name: 'DOCKER_IMAGE', choices: ['oraclelinux9', 'jdk17', 'jenkins', 'python39'], description: 'Docker image')
   }
 
+  environment {
+    PKR_VAR_docker_registry = 'docker-registry:5000'
+  }
+
   stages {
 
     stage('Checkout') {
@@ -27,7 +31,7 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh '/usr/bin/packer build -var-file=\"vars/${DOCKER_IMAGE}.pkrvars.hcl\" docker.pkr.hcl'
+        sh '/usr/bin/packer build -var-file=\"vars/${DOCKER_IMAGE}.pkrvars.hcl\" -only=\'*.docker.build\' docker.pkr.hcl'
       }
     }
 
@@ -39,7 +43,7 @@ pipeline {
 
     stage('Push') {
       steps {
-        echo 'Push'
+        sh '/usr/bin/packer build -var-file=\"vars/${DOCKER_IMAGE}.pkrvars.hcl\" -only=\'docker.push\' docker.pkr.hcl'
       }
     }
 
