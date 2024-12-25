@@ -83,7 +83,7 @@
       name: "docker-ce-stable"
       description: "Docker CE Stable - $basearch"
       baseurl: "https://download.docker.com/linux/centos/$releasever/$basearch/stable"
-      state: "{{ item.state | default('present') }}"
+      state: "present"
       gpgkey: "https://download.docker.com/linux/centos/gpg"
       gpgcheck: true
 
@@ -101,7 +101,7 @@
       name: "hashicorp"
       description: "Hashicorp Stable - $basearch"
       baseurl: "https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable"
-      state: "{{ item.state | default('present') }}"
+      state: "present"
       gpgkey: "https://rpm.releases.hashicorp.com/gpg"
       gpgcheck: true
 
@@ -118,7 +118,7 @@
       - python3-pip
       state: present
 
-  - name: "Ansible | Install ansible"
+  - name: Ansible | Install ansible
     ansible.builtin.pip:
       name: 
       - ansible-core>=2.15
