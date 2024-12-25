@@ -14,6 +14,7 @@
     - pipeline-stage-view:2.34
     - docker-workflow:580.vc0c340686b_54
     - swarm:3.48
+    - parameterized-trigger:806.vf6fff3e28c3e 
 
   tasks:
 
