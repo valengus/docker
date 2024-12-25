@@ -1,3 +1,0 @@
-folder('github') {
-  displayName('github')
-}

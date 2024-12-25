@@ -1,3 +1,4 @@
+import jenkins.model.Jenkins
 import com.cloudbees.hudson.plugins.folder.*
 import org.jenkinsci.plugins.workflow.job.WorkflowJob
 
