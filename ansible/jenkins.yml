@@ -76,6 +76,14 @@
       group: jenkins
       mode: '0640'
 
+  - name: "Jenkins | Folder for seed job"
+    file:
+      path: "/var/lib/jenkins/init.groovy.d"
+      owner: jenkins
+      group: jenkins
+      state: directory
+      mode: u=rwx,g=rx,o=rx
+
 
 
   - name: Docker | Add docker repository
