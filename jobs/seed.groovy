@@ -92,7 +92,7 @@ imageList.each { it ->
       }
       stage('Test') {
         steps {
-          echo 'Test'
+          echo 'docker run --rm -v ./${it.image}.tar:/${it.image}.tar aquasec/trivy image --input /${it.image}.tar'
         }
       }
       stage('Push') {
