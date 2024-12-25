@@ -1,21 +1,28 @@
 import jenkins.model.*
+import jenkins.triggers.ReverseBuildTrigger
 import hudson.model.*
 import hudson.triggers.*
 import com.cloudbees.hudson.plugins.folder.*
 import org.jenkinsci.plugins.workflow.job.*
 import org.jenkinsci.plugins.workflow.cps.*
-
-  
   
 def gitUrl = "https://github.com/valengus/docker.git"
 
 Jenkins jenkins = Jenkins.instance 
 
- // Jenkins folder for docker jobs
+// Jenkins folder for docker jobs
 def folder = jenkins.getItem("docker")
-// Create the folder if it doesn't exist
 if (folder == null) {
   folder = jenkins.createProject(Folder.class, "docker")
+}
+// Delete all jobs in "docker" folder
+folder.getItems().each { job ->
+  try {
+    println "Удаляем джобу: ${job.fullName}"
+    job.delete()  // Удаляем джобу
+  } catch (Exception e) {
+    println "Не удалось удалить джобу ${job.fullName}: ${e.message}"
+  }
 }
 
 // Clone repo
@@ -52,10 +59,9 @@ pkrvars.each { it ->
 
 println(imageList)
 
-
 imageList.each { it ->
 
-  // Jenkinsfile
+  // Jenkinsfile template
   def jenkinsfileContent = """
   pipeline {
     agent any
@@ -79,46 +85,39 @@ imageList.each { it ->
           sh '/usr/bin/packer init docker.pkr.hcl'
         }
       }
-      // stage('Build') {
-      //   steps {
-      //     sh "/usr/bin/packer build -var-file=vars/${it.image}.pkrvars.hcl -only=\'*.docker.build\' docker.pkr.hcl"
-      //   }
-      // }
-      // stage('Test') {
-      //   steps {
-      //     echo 'Test'
-      //   }
-      // }
-      // stage('Push') {
-      //   steps {
-      //     sh "/usr/bin/packer build -var-file=vars/${it.image}.pkrvars.hcl -only=\'docker.push\' docker.pkr.hcl"
-      //   }
-      // }
+      stage('Build') {
+        steps {
+          sh "/usr/bin/packer build -var-file=vars/${it.image}.pkrvars.hcl -only=\'*.docker.build\' docker.pkr.hcl"
+        }
+      }
+      stage('Test') {
+        steps {
+          echo 'Test'
+        }
+      }
+      stage('Push') {
+        steps {
+          sh "/usr/bin/packer build -var-file=vars/${it.image}.pkrvars.hcl -only=\'docker.push\' docker.pkr.hcl"
+        }
+      }
+      stage('Info') {
+        steps {
+          sh "curl -s \${PKR_VAR_docker_registry}/v2/${it.image}/tags/list | python3 -m json.tool"
+        }
+      }
     }
   }
   """
 
-  // Создаем новый job типа Pipeline
+  // Creating pipline jobs from Jenkinsfile template
   def job = folder.createProject(WorkflowJob, it.image)
-  // Устанавливаем содержание Jenkinsfile
   def flowDefinition = new CpsFlowDefinition(jenkinsfileContent, true)
   job.definition = flowDefinition
-
-  
-  // Сохраняем изменения
+  // Configuring a trigger
+  if (it.dependsOn != null) {
+    def trigger = new ReverseBuildTrigger("docker/${it.dependsOn}", Result.SUCCESS)
+    job.addTrigger(trigger)  
+  }
+  // Save
   job.save()
 }
-
-// // Trigers
-// imageList.each { it ->
-
-//   if (it.dependsOn != null) {
-//     // println("Переменная не равна null")
-//     def triggeringJobName = it.dependsOn
-//     def triggeredJobName = it.image
-
-//   } else {
-//     // println("Переменная равна null")
-//   }
-
-// }
