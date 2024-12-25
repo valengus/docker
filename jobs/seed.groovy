@@ -20,7 +20,7 @@ def gitCloneCommand = "git clone ${gitUrl}"
 def proc = gitCloneCommand.execute()
 proc.waitFor()
 
-// Get list of all files from var dir ends with '.pkrvars.hcl'
+// Get list of all files in var dir ends with '.pkrvars.hcl'
 def pkrvars = []
 def imageList = []
 def varFolder = new File("docker/vars")
