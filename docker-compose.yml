@@ -16,6 +16,7 @@ services:
     - DOCKER_TLS_VERIFY=1
     volumes:
     - jenkins-docker-certs:/certs/client:ro
+    - ./jobs/seed/seed.groovy:/var/lib/jenkins/init.groovy.d/seed.groovy
 
   docker:
     container_name: docker
