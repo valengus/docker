@@ -19,7 +19,7 @@ if (folder == null) {
 folder.getItems().each { job ->
   try {
     println "Удаляем джобу: ${job.fullName}"
-    job.delete()  // Удаляем джобу
+    job.delete()
   } catch (Exception e) {
     println "Не удалось удалить джобу ${job.fullName}: ${e.message}"
   }
@@ -92,7 +92,7 @@ imageList.each { it ->
       }
       stage('Test') {
         steps {
-          echo 'docker run --rm -v ./${it.image}.tar:/${it.image}.tar aquasec/trivy image --input /${it.image}.tar'
+          sh 'trivy image local/${it.image}:latest'
         }
       }
       stage('Push') {

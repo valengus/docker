@@ -76,9 +76,9 @@ build {
       tags       = concat(var.tags, [local.packerstarttime,])
     }
 
-    post-processor "docker-save" {
-      path = "${var.image_name}.tar"
-    }
+    # post-processor "docker-save" {
+    #   path = "${var.image_name}.tar"
+    # }
 
   }
 
