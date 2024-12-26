@@ -11,6 +11,7 @@ services:
     environment:
     - JENKINS_ADMIN_USER=admin
     - JENKINS_ADMIN_PASS=password
+    - JENKINS_NUM_EXECUTORS=1
     - DOCKER_HOST=tcp://docker:2376
     - DOCKER_CERT_PATH=/certs/client
     - DOCKER_TLS_VERIFY=1

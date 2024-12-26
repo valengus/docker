@@ -12,6 +12,7 @@ changes = [
 
   "ENV JENKINS_ADMIN_USER=\"admin\"",
   "ENV JENKINS_ADMIN_PASS=\"password\"",
+  "ENV JENKINS_NUM_EXECUTORS=\"1\"",
   "ENV JENKINS_DEBUG_LEVEL=\"5\"",
 
   "EXPOSE 8080",

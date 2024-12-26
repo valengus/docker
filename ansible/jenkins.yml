@@ -14,15 +14,13 @@
     - pipeline-stage-view:2.34
     - docker-workflow:580.vc0c340686b_54
     - swarm:3.48
-    - parameterized-trigger:806.vf6fff3e28c3e 
+    - prometheus:801.v98e119d8eeda_ 
 
   tasks:
 
-  - name: Jenkins | Install pkgs
+  - name: Jenkins | Install git
     ansible.builtin.dnf:
-      name: 
-      - git
-      state: present
+      name: git
 
   - name: Jenkins | Copy Jenkins repo GPG key
     ansible.builtin.rpm_key:
@@ -34,7 +32,7 @@
       name: "jenkins"
       description: "Jenkins-stable"
       baseurl: "{{ jenkins_repo_url }}"
-      state: "{{ item.state | default('present') }}"
+      state: "present"
 
   - name: Jenkins | Install jenkins
     ansible.builtin.yum:
@@ -64,6 +62,7 @@
     ansible.builtin.copy:
       content: |
         jenkins:
+          numExecutors: ${JENKINS_NUM_EXECUTORS}
           securityRealm:
             local:
               allowsSignup: false

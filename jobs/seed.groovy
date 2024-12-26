@@ -5,7 +5,7 @@ import hudson.triggers.*
 import com.cloudbees.hudson.plugins.folder.*
 import org.jenkinsci.plugins.workflow.job.*
 import org.jenkinsci.plugins.workflow.cps.*
-  
+
 def gitUrl = "https://github.com/valengus/docker.git"
 
 Jenkins jenkins = Jenkins.instance 
@@ -18,10 +18,9 @@ if (folder == null) {
 // Delete all jobs in "docker" folder
 folder.getItems().each { job ->
   try {
-    println "Удаляем джобу: ${job.fullName}"
+    println "Trying to delete ${job.fullName}"
     job.delete()
   } catch (Exception e) {
-    println "Не удалось удалить джобу ${job.fullName}: ${e.message}"
   }
 }
 
