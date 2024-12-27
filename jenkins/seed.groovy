@@ -110,6 +110,11 @@ imageList.each { it ->
         }
       }
     }
+    post {
+      always {
+          cleanWs()
+      }
+    }
   }
   """
 
@@ -122,6 +127,6 @@ imageList.each { it ->
     def trigger = new ReverseBuildTrigger("docker/${it.dependsOn}", Result.SUCCESS)
     job.addTrigger(trigger)  
   }
-  // Save
+  // Save job
   job.save()
 }
