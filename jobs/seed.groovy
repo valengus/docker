@@ -91,6 +91,11 @@ imageList.each { it ->
       }
       stage('Test') {
         steps {
+          sh '/usr/bin/packer build -var-file="vars/${it.image}.pkrvars.hcl" -only=\'*.docker.test\' docker.pkr.hcl'
+        }
+      }
+      stage('Trivy') {
+        steps {
           sh 'trivy image local/${it.image}:latest'
         }
       }

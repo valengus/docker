@@ -86,6 +86,28 @@ build {
 
 
 
+# TEST
+source "docker" "test" {
+  image       = "local/${var.image_name}"
+  run_command = [ "-dit", "--name", "packer_test_${var.image_name}", "{{.Image}}", "/bin/sh" ]
+  discard     = true
+  pull        = false
+}
+
+build {
+
+  name    = var.image_name
+  sources = [ "source.docker.test" ]
+
+  provisioner "ansible" {
+    playbook_file   = fileexists("ansible/test/${var.image_name}.yml") ? "ansible/test/${var.image_name}.yml" : "ansible/test/common.yml"
+    user            = "root"
+    extra_arguments = [ "--extra-vars", "ansible_host=packer_test_${var.image_name} ansible_connection=docker", ]
+  }
+
+}
+
+
 # PUSH
 source "docker" "push" {
   image       = "local/${var.image_name}"

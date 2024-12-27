@@ -1,0 +1,20 @@
+---
+- name: Test
+  hosts: all
+  become: true
+
+  tasks:
+
+  - name: Install epel-release
+    ansible.builtin.dnf:
+      name: epel-release
+    register: result
+    failed_when: result.changed
+
+  - name: Upgrade all packages
+    ansible.builtin.dnf:
+      name: '*'
+      state: latest
+      update_only: True
+    register: result
+    failed_when: result.changed
