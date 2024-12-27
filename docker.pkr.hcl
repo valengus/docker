@@ -46,7 +46,7 @@ variable "docker_registry" {
 # BUILD
 source "docker" "build" {
   image       = var.base_image
-  run_command = [ "-dit", "--name", "packer_build_${var.image_name}", "{{.Image}}", "/bin/sh" ]
+  run_command = [ "-dit", "--name", "packer-build-${var.image_name}", "{{.Image}}", "/bin/sh" ]
   commit      = true
   pull        = false
   changes     = var.changes
@@ -60,13 +60,13 @@ build {
   provisioner "ansible" {
     playbook_file   = "ansible/${var.image_name}.yml"
     user            = "root"
-    extra_arguments = [ "--extra-vars", "ansible_host=packer_build_${var.image_name} ansible_connection=docker", ]
+    extra_arguments = [ "--extra-vars", "ansible_host=packer-build-${var.image_name} ansible_connection=docker", ]
   }
 
   provisioner "ansible" {
     playbook_file   = "ansible/common/cleanup.yml"
     user            = "root"
-    extra_arguments = [ "--extra-vars", "ansible_host=packer_build_${var.image_name} ansible_connection=docker", ]
+    extra_arguments = [ "--extra-vars", "ansible_host=packer-build-${var.image_name} ansible_connection=docker", ]
   }
 
   post-processors {
@@ -75,10 +75,6 @@ build {
       repository = "local/${var.image_name}"
       tags       = concat(var.tags, [local.packerstarttime,])
     }
-
-    # post-processor "docker-save" {
-    #   path = "${var.image_name}.tar"
-    # }
 
   }
 
@@ -89,7 +85,7 @@ build {
 # TEST
 source "docker" "test" {
   image       = "local/${var.image_name}"
-  run_command = [ "-dit", "--name", "packer_test_${var.image_name}", "{{.Image}}", "/bin/sh" ]
+  run_command = [ "-dit", "--name", "packer-test-${var.image_name}", "{{.Image}}", "/bin/sh" ]
   discard     = true
   pull        = false
 }
@@ -102,7 +98,7 @@ build {
   provisioner "ansible" {
     playbook_file   = fileexists("ansible/test/${var.image_name}.yml") ? "ansible/test/${var.image_name}.yml" : "ansible/test/common.yml"
     user            = "root"
-    extra_arguments = [ "--extra-vars", "ansible_host=packer_test_${var.image_name} ansible_connection=docker", ]
+    extra_arguments = [ "--extra-vars", "ansible_host=packer-test-${var.image_name} ansible_connection=docker", ]
   }
 
 }
